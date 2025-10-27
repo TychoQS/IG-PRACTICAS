@@ -12,7 +12,7 @@ Se implementa unn sistema planteario con _Three.js_ que integra 5 planetas algun
 Como posible mejora seria interesante añadir algún tipo de detector de coliciones, ya que actualmente los objetos se atraviesan entre si. 
 
 ## Desarrollo principal
-El código principal tiene dos funciones, ```ìnit()```, que se encarga de inicializar todo lo necesario para la ejecución del programa, y ```animationLoop()``` que se encarga de manejar toda la lógica relacionada con la animación.   
+El código principal tiene dos funciones, ```init()```, que se encarga de inicializar todo lo necesario para la ejecución del programa, y ```animationLoop()``` que se encarga de manejar toda la lógica relacionada con la animación.   
 
 En la función ```init()``` lo primero que hace es llamar a ```initTextures()``` para cargar las diferentes texturas que se van a usar para que estén totalmente disponibles para el resto de la ejecución sin problemas. Las texturas usadas se pueden encontrar dentro de la carpeta ```src```. Se cargan texturas para los 5 planetas, para el sol y dos para las lunas, una de ellas la textura básica y otra para el mapa de relieve.
 ```js
