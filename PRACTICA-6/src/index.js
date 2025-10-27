@@ -24,8 +24,6 @@ let texture5;
 let sunTexture;
 let moonTexture;
 let moonbump;
-let grid;
-let shadow = true;
 let shipModel;
 
 const raycaster = new THREE.Raycaster();
@@ -83,13 +81,13 @@ function init() {
 }
 
 function initNave() {
-  const loader = new GLTFLoader();
+  const loader = new GLTFLoader(); // https://threejs.org/docs/#examples/en/loaders/GLTFLoader
   loader.load(
     "src/pixel_space_ship.glb", // "Pixel Space Ship" (https://skfb.ly/o6qU6) by Bucky is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/). No changes
     (gltf) => {
       shipModel = gltf.scene;
       shipModel.scale.set(0.002, 0.002, 0.002);
-      shipCamera.add(shipModel);
+      shipCamera.add(shipModel); // https://stackoverflow.com/questions/17218054/how-to-put-an-object-in-front-of-camera-in-three-js
       shipModel.position.set(0, -0.5, -2);
     },
     undefined,
@@ -135,9 +133,7 @@ function initPlanetas() {
 function animationLoop() {
   timestamp = (Date.now() - t0) * accglobal;
   requestAnimationFrame(animationLoop);
-  /**/
   for (let object of planets) {
-    // Animating planets
     const angle =
       timestamp * object.userData.speed + object.userData.angleOffset;
     object.position.x =
@@ -197,7 +193,7 @@ function initScene() {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(renderSettings.width, renderSettings.height);
-  renderer.shadowMap.enabled = true; // Enabling shadows
+  renderer.shadowMap.enabled = true; // Activando sombras
   document.body.append(renderer.domElement);
 
   camControls = new OrbitControls(generalCamera, renderer.domElement);
@@ -213,12 +209,6 @@ function initScene() {
   zplane = new THREE.Mesh(zplaneSettings.geometry, zplaneSettings.material);
   zplane.visible = false;
   scene.add(zplane);
-  /*
-  grid = new THREE.GridHelper(20, 40);
-  grid.geometry.rotateX(Math.PI / 2);
-  grid.position.set(0, 0, 0.05);
-  scene.add(grid);
-  */
 }
 
 function initLights() {
@@ -289,7 +279,7 @@ function Planeta(
   planeta.userData.f1 = f1;
   planeta.userData.f2 = f2;
   planeta.position.set(x, y, 0);
-  if (shadow) planeta.castShadow = true;
+  planeta.castShadow = true;
   planeta.receiveShadow = true;
   planets.push(planeta);
   scene.add(planeta);
