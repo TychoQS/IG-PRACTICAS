@@ -9,13 +9,112 @@ El proyecto se debe ejecutar mediante el enlace al proyecto en CodeSandbox del a
 # Trabajo realizado
 El código principal tiene dos funciones, ```ìnit()```, que se encarga de inicializar todo lo necesario para la ejecución del programa, y ```animationLoop()``` que se encarga de manejar toda la lógica relacionada con la animación.   
 
-En la función ```init()``` lo primero que hace es llamar a ```initTextures()``` para cargar las diferentes texturas que se van a usar para que estén totalmente disponibles para el resto de la ejecución sin problemas. 
+En la función ```init()``` lo primero que hace es llamar a ```initTextures()``` para cargar las diferentes texturas que se van a usar para que estén totalmente disponibles para el resto de la ejecución sin problemas. Las texturas usadas se pueden encontrar dentro de la carpeta ```src```. Se cargan texturas para los 5 planetas, para el sol y dos para las lunas, una de ellas la textura básica y otra para el mapa de relieve.
+```js
+function initTextures() {
+  texture1 = new THREE.TextureLoader().load("src/pluto.jpg");
+  texture2 = new THREE.TextureLoader().load("src/jupiter.jpg");
+  texture3 = new THREE.TextureLoader().load("src/neptune.jpg");
+  texture4 = new THREE.TextureLoader().load("src/mars.jpg");
+  texture5 = new THREE.TextureLoader().load("src/venus.jpg");
+  sunTexture = new THREE.TextureLoader().load("src/sun.jpg");
+  moonbump = new THREE.TextureLoader().load("src/moonbump.jpg");
+  moonTexture = new THREE.TextureLoader().load("src/moonmap4k.jpg");
+}
+```
 
-A continuación, ```initScene()``` se encarga de configurar la escena. Dentro de esta función se crean las cámaras (la cámara general y la cámara de la nave), se inicializa el renderizador de Three.js, se añaden los controles de cámara (OrbitControls y FlyControls) y se prepara un plano invisible que se usará para el _raycasting_. Además, se llama a ```initLights()``` para añadir las luces. En este caso como es un sistema solar, se ha optado por añadir solo dos tipos de luces. Luz ambiental para iluminar por igual a todos los objetos y una luz de tipo _PointLight_ que ilumina en todas las direcciones (como si fuese una bombilla) en el origen, para imitar el comportamiento del sol. En estos además se activa el sombreado en el _renderer_ y en la luz de tipo _Pointlight_, ya que queremos que si hay luces, se generen sombras.
+A continuación, ```initScene()``` se encarga de configurar la escena. Dentro de esta función se crean las cámaras (la cámara general y la cámara de la nave), se inicializa el renderizador de _Three.js_, se añaden los controles de cámara (OrbitControls y FlyControls) y se prepara un plano invisible que se usará para el _raycasting_. 
+```js
+function initScene() {
+  scene = new THREE.Scene();
+
+  shipCamera = new THREE.PerspectiveCamera(
+    shipCameraSettings.fov,
+    shipCameraSettings.aspect,
+    shipCameraSettings.near,
+    shipCameraSettings.far
+  );
+
+  shipCamera.position.set(
+    shipCameraSettings.x,
+    shipCameraSettings.y,
+    shipCameraSettings.z
+  );
+
+  shipCamera.lookAt(0, 0, 0);
+  scene.add(shipCamera);
+
+  generalCamera = new THREE.PerspectiveCamera(
+    cameraSettings.fov,
+    cameraSettings.aspect,
+    cameraSettings.near,
+    cameraSettings.far
+  );
+  generalCamera.position.set(
+    cameraSettings.x,
+    cameraSettings.y,
+    cameraSettings.z
+  );
+
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(renderSettings.width, renderSettings.height);
+  renderer.shadowMap.enabled = true; // Enabling shadows
+  document.body.append(renderer.domElement);
+
+  camControls = new OrbitControls(generalCamera, renderer.domElement);
+  flyControls = new FlyControls(shipCamera, renderer.domElement);
+  flyControls.dragToLook = true;
+  flyControls.movementSpeed = 1;
+  flyControls.rollSpeed = 0.5;
+  flyControls.enabled = false;
+
+  currentCamera = generalCamera;
+  initLights();
+
+  zplane = new THREE.Mesh(zplaneSettings.geometry, zplaneSettings.material);
+  zplane.visible = false;
+  scene.add(zplane);
+}
+```
+
+Además dentro de ```initScene()```, se llama a ```initLights()``` para añadir las luces a la escena. En este caso como es un sistema solar, se ha optado por añadir solo dos tipos de luces. Luz ambiental para iluminar por igual a todos los objetos y una luz de tipo _PointLight_ que ilumina en todas las direcciones (como si fuese una bombilla) en el origen, para imitar el comportamiento del sol. En estos además se activa el sombreado en el renderizador y en la luz de tipo _Pointlight_, ya que queremos teniendo luces, queremos que se generen sombras.
+```js
+function initLights() {
+  const ambientLight = new THREE.AmbientLight(0x404040);
+  scene.add(ambientLight);
+  const pointLight = new THREE.PointLight(0xffffff, 3, 100); // Luz del sol
+  pointLight.position.set(0, 0, 0);
+  pointLight.castShadow = true; // Activando que la luz del sol pueda generar sombras
+  pointLight.shadow.mapSize.width = 4096; // Propiedades obtenidas de: https://threejs.org/docs/#api/en/lights/shadows/PointLightShadow como dice aqui, cuanto mayores son, mejores las sombras https://threejs.org/docs/index.html#api/en/lights/shadows/LightShadow
+  pointLight.shadow.mapSize.height = 4096;
+  scene.add(pointLight);
+}
+```
 
 ```initEventListeners()``` configura los eventos del usuario. Se añade un listener para detectar clics de ratón, que permite crear nuevos planetas con raycasting, y un listener para el teclado, que permite cambiar entre la vista general y la vista desde la nave.
+```js
+function initEventListeners() {
+  document.addEventListener("mousedown", onDocumentMouseDown); // Gestión de evento de clic de ratón
+  document.addEventListener("keydown", (e) => {
+    // Gestión de evento para pulsaciones en teclado
+    if (e.key === "G" || e.key === "g") generalView();
+    if (e.key === "N" || e.key === "n") shipView();
+  });
+}
+```
 
 La función ```Estrella()``` se encarga de crear el sol de la escena. Para ello se genera una esfera a la que se le debe de pasar un radio, el color y opcionalmente una textura que se le puede aplicar.
+```js
+function Estrella(rad, col, texture = undefined) {
+  let geometry = new THREE.SphereGeometry(rad, 32, 32);
+  let material = new THREE.MeshBasicMaterial({ color: col, wireframe: false });
+  if (texture) {
+    material.map = texture;
+  }
+  sun = new THREE.Mesh(geometry, material);
+  scene.add(sun);
+}
+```
 
 
 
