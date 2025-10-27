@@ -9,19 +9,14 @@ El proyecto se debe ejecutar mediante el enlace al proyecto en CodeSandbox del a
 # Trabajo realizado
 El código principal tiene dos funciones, ```ìnit()```, que se encarga de inicializar todo lo necesario para la ejecución del programa, y ```animationLoop()``` que se encarga de manejar toda la lógica relacionada con la animación.   
 
-En la función ```init()``` lo primero que se hace es llamar a ```initTextures()``` es cargar las diferentes texturas que se van a usar para que estén totalmente disponibles para el resto de la ejecución sin problemas. En este caso se cargan las texturas para 5 planetas, el sol y dos para la luna, una de ellas la textura normal y la otra la de relieve. Todas ellas obtenidas de la [esta página de aquí](https://planetpixelemporium.com/planets.html).
-```js
-function initTextures() {
-  texture1 = new THREE.TextureLoader().load("src/pluto.jpg");
-  texture2 = new THREE.TextureLoader().load("src/jupiter.jpg");
-  texture3 = new THREE.TextureLoader().load("src/neptune.jpg");
-  texture4 = new THREE.TextureLoader().load("src/mars.jpg");
-  texture5 = new THREE.TextureLoader().load("src/venus.jpg");
-  sunTexture = new THREE.TextureLoader().load("src/sun.jpg");
-  moonbump = new THREE.TextureLoader().load("src/moonbump.jpg");
-  moonTexture = new THREE.TextureLoader().load("src/moonmap4k.jpg");
-}
-```
+En la función ```init()``` lo primero que hace es llamar a ```initTextures()``` para cargar las diferentes texturas que se van a usar para que estén totalmente disponibles para el resto de la ejecución sin problemas. 
+
+A continuación, ```initScene()``` se encarga de configurar la escena. Dentro de esta función se crean las cámaras (la cámara general y la cámara de la nave), se inicializa el renderizador de Three.js, se añaden los controles de cámara (OrbitControls y FlyControls) y se prepara un plano invisible que se usará para el _raycasting_. Además, se llama a ```initLights()``` para añadir las luces. En este caso como es un sistema solar, se ha optado por añadir solo dos tipos de luces. Luz ambiental para iluminar por igual a todos los objetos y una luz de tipo _PointLight_ que ilumina en todas las direcciones (como si fuese una bombilla) en el origen, para imitar el comportamiento del sol. En estos además se activa el sombreado en el _renderer_ y en la luz de tipo _Pointlight_, ya que queremos que si hay luces, se generen sombras.
+
+```initEventListeners()``` configura los eventos del usuario. Se añade un listener para detectar clics de ratón, que permite crear nuevos planetas con raycasting, y un listener para el teclado, que permite cambiar entre la vista general y la vista desde la nave.
+
+La función ```Estrella()``` se encarga de crear el sol de la escena. Para ello se genera una esfera a la que se le debe de pasar un radio, el color y opcionalmente una textura que se le puede aplicar.
+
 
 
 # Controles
