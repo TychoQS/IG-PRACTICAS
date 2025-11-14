@@ -570,13 +570,13 @@ Y para la totalidad de la página se han aplicado otras pocas reglas de estilo p
 ## Capturas y demostración
 
 ### Vista general
-![Vista general de terremotos](general_view.png)
+![Vista general de terremotos](./general_view.PNG)
 
 ### Tooltip informativo
-![Tooltip con información detallada](sniping_tool_view.png)
+![Tooltip con información detallada](sniping_tool_view.PNG)
 
 ### Ondas expansivas
-![Ondas sísmicas expandiéndose](waves_view.png)
+![Ondas sísmicas expandiéndose](waves_view.PNG)
 
 ## Vídeo
 [Ver vídeo de demostración](./DEMO.mp4)
