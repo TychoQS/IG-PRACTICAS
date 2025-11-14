@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Práctica S8 IG</title>
+    <meta charset="UTF-8" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="flex: auto; display: flex; gap: 10px; justify-content: center">
+      <label>
+        Desde:
+        <input
+          type="number"
+          name="inf"
+          placeholder="Desde"
+          min="1965"
+          max="2016"
+        />
+      </label>
+      <label>
+        Hasta:
+        <input
+          type="number"
+          name="sup"
+          placeholder="Hasta"
+          min="1965"
+          max="2016"
+        />
+      </label>
+      <button id="button">Apply</button>
+    </div>
+    <div id="app"></div>
+    <script src="index.js" type="module"></script>
+  </body>
+</html>
