@@ -2,7 +2,7 @@
 
 ## Enlace al proyecto
 En este caso como se ha desarrollado un _shader_ con patrones generativos, no se ha usado codesandbox, sino que se ha desarrollado
-en este [editor web](https://editor.thebookofshaders.com/). Es por eso que en vez de un enlace a un proyecto, se lo dejamos al fichero con el código fuente.
+en este [editor web](https://editor.thebookofshaders.com/). Es por eso que en vez de un enlace a un proyecto, le dejamos un vinculo al código fuente.
 
 ## Descripción de entrega
 
@@ -16,11 +16,13 @@ se iran describiendo los pasos e intenciones detrás de los diferentes resultado
 
 Mientras iba leyendo el readme para familiarizarme con las cosas que se podían hacer a través de los diferentes ejemplos, vi [el siguiente ejemplo,
 que extraigo del propio repositorio de la práctica:](https://github.com/otsedom/otsedom.github.io/blob/main/IG/S9/images/p9_editorDibuja25.png)
+
 ![p9_editorDibuja25.png](images/p9_editorDibuja25.png)
 
 Me recordó al recurrente mapa del videojuego Mario Kart llamado "Senda Arcoiris" debido a que la carrera tiene lugar sobre un arcoiris.
 A continuación una imagen del mapa que menciono. La imagen ha sido extraída de _Google Imágenes_. 
 ![mk8.png](images/mk8.png)
+
 Nótese cómo de fondo se ve un "suelo" que está formado por una cuadrícula multicolor como
 si de un arcoíris se tratáse.
 
